@@ -191,9 +191,11 @@ class Localization
         $this->contextLocales[$context] = $locale;
         if ($context === $this->activeContext) {
             PunicData::setDefaultLocale($locale);
-            $event = new \Symfony\Component\EventDispatcher\GenericEvent();
-            $event->setArgument('locale', $locale);
-            Events::dispatch('on_locale_load', $event);
+            if (class_exists('\Events')) {
+                $event = new \Symfony\Component\EventDispatcher\GenericEvent();
+                $event->setArgument('locale', $locale);
+                Events::dispatch('on_locale_load', $event);
+            }
         }
     }
 
